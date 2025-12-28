@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  flink-jobmanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flink-jobmanager
+    command: jobmanager
+    ports:
+      - "8091:8081"
+      - "6123:6123"
+    networks:
+      - aws_molpay
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        rest.bind-address: 0.0.0.0
+
+  flink-taskmanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flink-taskmanager
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    networks:
+      - aws_molpay
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.bind-host: 0.0.0.0
+        taskmanager.numberOfTaskSlots: 4
+
+networks:
+  aws_molpay:
+    external: true
