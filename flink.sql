@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS source_table (
 ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'stream_order_intake',
-  'properties.bootstrap.servers' = 'broker:9092',
+  'properties.bootstrap.servers' = 'broker:29092',
   'key.format' = 'json',
   'value.format' = 'json'
 );
@@ -31,40 +31,68 @@ CREATE TABLE IF NOT EXISTS source_table (
 -- =========================
 
 -- ----- Local MinIO + Iceberg REST -----
-CREATE CATALOG IF NOT EXISTS local_catalog WITH (
+CREATE CATALOG local_catalog WITH (
   'type'='iceberg',
   'catalog-impl'='org.apache.iceberg.rest.RESTCatalog',
   'uri'='http://lakehouse_catalog:8181',
-  'warehouse'='s3a://lakehouse/',
-  'io-impl'='org.apache.iceberg.aws.s3.S3FileIO',
-  'property-version'='1',
-  'access-key'='admin',
-  'secret-key'='12345678',
-  's3.endpoint'='http://lakehouse_storage:9000',
-  's3.region'='ap-southeast-1'
+  'warehouse'='s3://lakehouse/'
 );
 
 -- ----- PROD Glue Catalog -----
-CREATE CATALOG IF NOT EXISTS glue_catalog WITH (
-  'type'='iceberg',
-  'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog',
-  'warehouse'='s3://poc-iceberg-20251123/iceberg-warehouse/',
-  'io-impl'='org.apache.iceberg.aws.s3.S3FileIO'
-);
+-- CREATE CATALOG IF NOT EXISTS glue_catalog WITH (
+--   'type'='iceberg',
+--   'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog',
+--   'warehouse'='s3://poc-iceberg-20251123/iceberg-warehouse/',
+--   'io-impl'='org.apache.iceberg.aws.s3.S3FileIO'
+-- );
 
 -- =========================
 -- USE CATALOG / DATABASE
 -- =========================
 
--- Local / prod toggle: pick the catalog to use
--- USE local_catalog;  -- uncomment for local
--- USE glue_catalog;   -- uncomment for prod
+-- TOGGLE: Choose your environment here
+USE CATALOG local_catalog;  -- Use this for Local MinIO
+-- USE CATALOG glue_catalog;   -- Use this for AWS EMR/Glue
 
--- Database
+-- Create the Database in the active catalog
 CREATE DATABASE IF NOT EXISTS lakehouse_db;
 USE lakehouse_db;
 
 -- =========================
 -- Sink Table (Iceberg)
 -- =========================
-CREATE TAB
+CREATE TABLE IF NOT EXISTS sink_order_iceberg (
+  `id` INT,
+  `product` STRING,
+  `amount` INT,
+  `buyer_id` INT,
+  `create_date` STRING,
+  `update_date` STRING,
+  `row_time` BIGINT,  -- Match the source schema
+  PRIMARY KEY (`id`) NOT ENFORCED
+) WITH (
+  'format-version' = '2',
+  'write.upsert.enabled' = 'true'
+);
+
+-- =========================
+-- Flink Job Settings
+-- =========================
+SET 'pipeline.name' = 'job_upsert_order_iceberg';
+SET 'execution.checkpointing.interval' = '10s'; -- Critical for Iceberg commits
+SET 'execution.checkpointing.mode' = 'EXACTLY_ONCE';
+
+-- =========================
+-- INSERT (Streaming Job)
+-- =========================
+-- We use full paths to be absolutely sure where data is coming from/going to
+INSERT INTO sink_order_iceberg
+SELECT 
+    id, 
+    product, 
+    amount, 
+    buyer_id, 
+    create_date, 
+    update_date, 
+    row_time
+FROM default_catalog.default_database.source_table;
