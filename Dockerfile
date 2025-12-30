@@ -1,10 +1,7 @@
 FROM flink:1.20.0-scala_2.12
 
-# Create a directory for global custom JARs
-RUN mkdir -p /opt/flink/usrlib
+# flink lib jars
+COPY lib_jars/lib/*.jar /opt/flink/lib/
 
-# Copy your JARs into the global lib path
-COPY lib/*.jar /opt/flink/lib/
-
-# Set entrypoint to Flink
+# entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]

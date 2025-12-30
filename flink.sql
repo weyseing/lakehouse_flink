@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS source_table (
 ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'stream_order_intake',
-  -- PROD Kafka bootstrap (replace with env later)
   'properties.bootstrap.servers' = 'broker:9092',
   'key.format' = 'json',
   'value.format' = 'json'
