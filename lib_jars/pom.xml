@@ -11,7 +11,8 @@
         <flink.version>1.20.0</flink.version>
         <iceberg.version>1.7.1</iceberg.version>
         <kafka.connector.version>3.3.0-1.20</kafka.connector.version>
-        <hadoop.version>3.4.0</hadoop.version>
+        <flink.hadoop.version>2.8.3-10.0</flink.hadoop.version>
+        
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,16 +34,16 @@
             <artifactId>iceberg-aws-bundle</artifactId>
             <version>${iceberg.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-shaded-hadoop-2-uber</artifactId>
-            <version>2.8.3-10.0</version>
+            <version>${flink.hadoop.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- copy jars to /lib folder -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -62,6 +63,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- clean up /lib folder -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.3.2</version>
@@ -73,6 +75,26 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+            <!-- check for dependency conflicts -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-dependency-convergence</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <dependencyConvergence/>
+                            </rules>
+                            <fail>true</fail> 
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS source_table (
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'upsert-kafka',
-  'topic' = 'stream_order_intake',
+  'topic' = 'lakehouse_txn_stream_txn_metadata',
   'properties.bootstrap.servers' = 'broker:29092',
   'key.format' = 'json',
   'value.format' = 'json'

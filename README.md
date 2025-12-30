@@ -3,12 +3,17 @@
 ```bash
 sudo apt install maven -y
 ```
-- **Go to `/lib_jars` folder**
-- **Check version conflict**
+- **Build Jars files**
 ```bash
-mvn dependency:tree -Dverbose
-```
-- **Build Jar files**
-```bash
+cd lib_jars
 mvn clean package -DskipTests
+```
+- **Copy Jars file**
+    - **For `Dev`, `docker compose build` to copy Jars files**
+    - **For `Production`, copy to `/usr/lib/flink/lib`**
+
+- **Restart Flink sessions**
+```bash
+yarn application -kill <APPLICATION_ID>
+flink-yarn-session -d -nm "MyFlinkSession" -s 2 -jm 1024m -tm 4096m
 ```
