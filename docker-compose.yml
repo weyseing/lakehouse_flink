@@ -1,26 +1,31 @@
-version: "3.9"
 services:
   flink-jobmanager:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: flink-jobmanager
     command: jobmanager
     ports:
       - "8091:8081"
-      - "6123:6123"
     networks:
       - aws_molpay
     environment:
-      - |
-        FLINK_PROPERTIES=
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: 12345678
+      AWS_REGION: ap-southeast-1
+      FLINK_PROPERTIES: |
         jobmanager.rpc.address: flink-jobmanager
         rest.bind-address: 0.0.0.0
+        s3.endpoint: http://lakehouse-storage:9000
+        s3.path-style-access: true
+        state.checkpoints.dir: s3://confluent-kafka-rms/lakehouse/checkpoints
+        state.savepoints.dir: s3://confluent-kafka-rms/lakehouse/savepoints
+        execution.checkpointing.interval: 10s
+        execution.checkpointing.mode: EXACTLY_ONCE
+        fs.allowed-fallback-filesystems: s3
+    volumes:
+      - .:/lakehouse_flink
 
   flink-taskmanager:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: flink-taskmanager
     depends_on:
       - flink-jobmanager
@@ -28,11 +33,16 @@ services:
     networks:
       - aws_molpay
     environment:
-      - |
-        FLINK_PROPERTIES=
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: 12345678
+      AWS_REGION: ap-southeast-1
+      FLINK_PROPERTIES: |
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.bind-host: 0.0.0.0
         taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 2048m
+        s3.endpoint: http://lakehouse-storage:9000
+        s3.path-style-access: true
 
 networks:
   aws_molpay:
