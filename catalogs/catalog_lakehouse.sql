@@ -1,4 +1,4 @@
-CREATE CATALOG glue_catalog WITH (
+CREATE CATALOG catalog_lakehouse WITH (
   'type'='iceberg',
   'catalog-impl'='org.apache.iceberg.rest.RESTCatalog',
   'uri'='http://lakehouse-catalog:8181',

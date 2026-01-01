@@ -1,0 +1,1 @@
+mvn clean package -DskipTests -f ../lib_jars/pom.xml

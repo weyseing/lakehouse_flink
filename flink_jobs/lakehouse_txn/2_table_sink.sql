@@ -1,7 +1,7 @@
-USE CATALOG default_catalog;
-USE default_database;
+USE CATALOG catalog_lakehouse; 
+USE lakehouse_db;
 
-CREATE TABLE lakehouse_txn_table_kafka_source (
+CREATE TABLE IF NOT EXISTS lakehouse_txn_table_sink (
   TRANID BIGINT,
   CHANNEL STRING,
   MERCHANTID STRING,
@@ -75,12 +75,9 @@ CREATE TABLE lakehouse_txn_table_kafka_source (
   VISACHECKOUT_TXNID STRING,
   DEF_CHANNEL STRING,
   CHANNEL_COST DECIMAL(20, 2),
-
+  
   PRIMARY KEY (TRANID) NOT ENFORCED
 ) WITH (
-  'connector' = 'upsert-kafka',
-  'topic' = 'lakehouse_txn_stream_txn_metadata',
-  'properties.bootstrap.servers' = 'broker:29092',
-  'key.format' = 'json',
-  'value.format' = 'json'
+  'format-version' = '2',
+  'write.upsert.enabled' = 'true'
 );
