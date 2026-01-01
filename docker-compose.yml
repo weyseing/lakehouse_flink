@@ -40,7 +40,7 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.bind-host: 0.0.0.0
         taskmanager.numberOfTaskSlots: 4
-        taskmanager.memory.process.size: 2048m
+        taskmanager.memory.process.size: 4096m
         s3.endpoint: http://lakehouse-storage:9000
         s3.path-style-access: true
 
