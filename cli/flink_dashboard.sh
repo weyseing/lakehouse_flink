@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# for LOCAL
-# - access to http://localhost:8091
-
 # env
 export $(grep -v '^#' .env | xargs)
 
