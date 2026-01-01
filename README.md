@@ -8,8 +8,7 @@ sudo apt install maven -y
 ```
 - **Build Jars files**
 ```bash
-cd lib_jars
-mvn clean package -DskipTests
+./cli/build_lib_jars.sh
 ```
 - **Copy Jars file & restart Flink session**
     - **For `Dev` environment**
