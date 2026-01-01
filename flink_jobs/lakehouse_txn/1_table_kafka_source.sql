@@ -80,7 +80,12 @@ CREATE TABLE lakehouse_txn_table_kafka_source (
 ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'lakehouse_txn_stream_txn_metadata',
-  'properties.bootstrap.servers' = 'broker:29092',
   'key.format' = 'json',
-  'value.format' = 'json'
+  'value.format' = 'json',
+
+  'properties.bootstrap.servers' = '$BROKER_ENDPOINT',
+  'properties.ssl.endpoint.identification.algorithm' = 'https',
+  'properties.sasl.mechanism' = 'PLAIN',
+  'properties.sasl.jaas.config' = 'org.apache.kafka.common.security.plain.PlainLoginModule required username="${BROKER_API_KEY}" password="${BROKER_API_SECRET}";',
+  'properties.security.protocol' = '${BROKER_SECURITY_PROTOCOL}'
 );
