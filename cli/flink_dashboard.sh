@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# for LOCAL
+# - access to http://localhost:8091
+
 # env
 export $(grep -v '^#' .env | xargs)
 
@@ -27,5 +30,4 @@ echo "Internal Port: $REMOTE_PORT"
 echo "Local Link   : http://localhost:$REMOTE_PORT"
 echo "-------------------------------------------"
 
-# tunnel
-exec ./cli/ssh_primary_node.sh "$REMOTE_PORT" "$REMOTE_IP" "$REMOTE_PORT"
+# ssm port forwarding

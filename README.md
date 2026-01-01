@@ -1,3 +1,6 @@
+# Setup Guide
+- **Copy `.env.example` to `.env` & set values**
+
 # Build Custom Lib Jars
 - **Install Maven**
 ```bash

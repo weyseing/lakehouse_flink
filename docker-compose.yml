@@ -4,7 +4,7 @@ services:
     container_name: flink-jobmanager
     command: jobmanager
     ports:
-      - "8091:8081"
+      - "8091:8081" # flink dashboard
     networks:
       - aws_molpay
     environment:
