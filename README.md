@@ -11,12 +11,16 @@ sudo apt install maven -y
 cd lib_jars
 mvn clean package -DskipTests
 ```
-- **Copy Jars file**
-    - **For `Dev`, `docker compose build` to copy Jars files**
-    - **For `Production`, copy to `/usr/lib/flink/lib`**
-
-- **Restart Flink sessions**
-```bash
-yarn application -kill <APPLICATION_ID>
-flink-yarn-session -d -nm "MyFlinkSession" -s 2 -jm 1024m -tm 4096m
-```
+- **Copy Jars file & restart Flink session**
+    - **For `Dev` environment**
+        - `docker compose build` to copy Jars files
+        - `docker compose up -d --force-recreate` to restart session
+    - **For `Production` environment**
+        - Manually copy to `/usr/lib/flink/lib`
+        -- Restart Flink session
+        ```bash
+        ./cli/list_flink_session.sh # check session ID
+        yarn application -kill <APPLICATION_ID> # stop session
+        ./cli/start_flink_session.sh # recreate session
+        ```
+        
