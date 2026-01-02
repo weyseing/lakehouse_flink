@@ -2,7 +2,7 @@ SET 'pipeline.name' = 'lakehouse_txn_insert_stream';
 SET 'execution.checkpointing.interval' = '10s'; 
 SET 'execution.checkpointing.mode' = 'EXACTLY_ONCE';
 
-INSERT INTO catalog_lakehouse.lakehouse_db.lakehouse_txn_table_sink
+INSERT INTO rds_master_onlinepayment1.rds_master_onlinepayment1.lakehouse_txn_table_sink
 SELECT 
     TRANID,
     CHANNEL,

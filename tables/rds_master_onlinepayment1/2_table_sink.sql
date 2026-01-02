@@ -1,7 +1,7 @@
-USE CATALOG catalog_lakehouse; 
-USE lakehouse_db;
+USE CATALOG rds_master_onlinepayment1; 
+USE rds_master_onlinepayment1;
 
-CREATE TABLE IF NOT EXISTS lakehouse_txn_table_sink (
+CREATE TABLE IF NOT EXISTS transaction (
   TRANID BIGINT,
   CHANNEL STRING,
   MERCHANTID STRING,

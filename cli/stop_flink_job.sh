@@ -5,7 +5,6 @@ export $(grep -v '^#' .env | xargs)
 
 SESSION_NAME=$1
 JOB_NAME=$2
-SAVEPOINT_PATH="s3://${ICEBERG_S3_BUCKET}/${ICEBERG_S3_SAVEPOINT}/"
 
 # session name & job name
 if [ -z "$SESSION_NAME" ] || [ -z "$JOB_NAME" ]; then
@@ -28,11 +27,9 @@ if [ -z "$FLINK_JOB_ID" ]; then
 fi
 
 # display
-echo "Stopping Job: $JOB_NAME ($FLINK_JOB_ID)"
 echo "Target Savepoint: $SAVEPOINT_PATH"
 
 # stop job
 flink stop -t yarn-session \
   -Dyarn.application.id=$SESSION_ID \
-  --savepointPath $SAVEPOINT_PATH \
   $FLINK_JOB_ID
