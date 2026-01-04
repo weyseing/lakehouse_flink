@@ -1,7 +1,7 @@
-CREATE CATALOG rds_master_onlinepayment1 WITH (
+CREATE CATALOG awsdatacatalog WITH (
   'type'='iceberg',
   'catalog-impl'='${CATALOG_IMPL}',
-  'warehouse'='s3://${ICEBERG_S3_BUCKET}/${CATALOG_RDS_MASTER_OP1_STORAGE}',
+  'warehouse'='s3://${ICEBERG_S3_BUCKET}/${CATALOG_AWSDATACATALOG_STORAGE}',
   'client.region'='${ICEBERG_S3_REGION}',
   'uri'='${CATALOG_URI}',
   's3.endpoint'='${S3_ENDPOINT}',

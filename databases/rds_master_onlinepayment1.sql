@@ -1,2 +1,2 @@
-USE CATALOG rds_master_onlinepayment1;  
+USE CATALOG awsdatacatalog;  
 CREATE DATABASE rds_master_onlinepayment1;

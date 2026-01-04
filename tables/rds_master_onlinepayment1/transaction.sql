@@ -1,4 +1,4 @@
-USE CATALOG rds_master_onlinepayment1; 
+USE CATALOG awsdatacatalog; 
 USE rds_master_onlinepayment1;
 
 CREATE TABLE IF NOT EXISTS transaction (

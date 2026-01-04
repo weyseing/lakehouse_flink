@@ -2,7 +2,7 @@ SET 'pipeline.name' = 'lakehouse_txn_job_upsert_stream';
 SET 'execution.checkpointing.interval' = '10s'; 
 SET 'execution.checkpointing.mode' = 'EXACTLY_ONCE';
 
-INSERT INTO rds_master_onlinepayment1.rds_master_onlinepayment1.transaction
+INSERT INTO awsdatacatalog.rds_master_onlinepayment1.transaction
 SELECT 
     TRANID,
     CHANNEL,
