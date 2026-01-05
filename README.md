@@ -1,4 +1,14 @@
 # Setup Guide
+- **Git clone from Gitlab**
+```bash
+# setup credential (use 'gitdeploy' user)
+vim ~/.netrc
+
+# git clone
+git clone https://git2u.fiuu.com/server/lakehouse/flink.git /lakehouse_flink/
+```
+
+- **Update ~/.bashrc based on `Dockerfile`**
 - **Copy `.env.example` to `.env` & set values**
 
 # Build Custom Lib Jars
