@@ -3,7 +3,7 @@ CREATE CATALOG awsdatacatalog WITH (
   'catalog-impl'='${CATALOG_IMPL}',
   'warehouse'='s3://${ICEBERG_S3_BUCKET}/${CATALOG_AWSDATACATALOG_STORAGE}',
   'client.region'='${ICEBERG_S3_REGION}',
-  'uri'='${CATALOG_URI}',
-  's3.endpoint'='${S3_ENDPOINT}',
+  'uri'='${CATALOG_URI}',                     -- exclude in prod
+  's3.endpoint'='${S3_ENDPOINT}',             -- exclude in prod
   's3.path-style-access'='${S3_PATH_STYLE}'
 );
