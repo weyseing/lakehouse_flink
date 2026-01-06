@@ -30,6 +30,6 @@ fi
 echo "Target Savepoint: $SAVEPOINT_PATH"
 
 # stop job
-flink stop -t yarn-session \
+flink cancel -t yarn-session \
   -Dyarn.application.id=$SESSION_ID \
   $FLINK_JOB_ID
