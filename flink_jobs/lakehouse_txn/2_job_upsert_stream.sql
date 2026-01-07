@@ -1,6 +1,7 @@
 SET 'pipeline.name' = 'lakehouse_txn_job_upsert_stream';
 SET 'execution.checkpointing.interval' = '10s'; 
 SET 'execution.checkpointing.mode' = 'EXACTLY_ONCE';
+SET 'table.exec.resource.default-parallelism' = '3';
 
 INSERT INTO awsdatacatalog.rds_master_onlinepayment1.transaction
 SELECT 
